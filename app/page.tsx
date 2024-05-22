@@ -8,7 +8,6 @@ import fetchBlogs from "./utils/fetch-blogs";
 
 export default async function Home() {
   const blogs = await fetchBlogs("");
-  console.log(blogs.data);
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 mt-5 gap-5">
       {blogs.data.map((post: any) => (

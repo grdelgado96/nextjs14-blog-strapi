@@ -1,14 +1,12 @@
 import Image from "next/image";
 import fetchBlogs from "@/app/utils/fetch-blogs";
 import config from "../../config";
-import { mdToHTML } from "../../snarkdown";
-export default async function BlogArticle(props: any) {
-  console.log("slug:");
-  console.log(props.params.slug);
-  const blogs = await fetchBlogs(`&filters[slug][$eq]=${props.params.slug}`);
+import RichTextRenderer from "@/app/components/RichTextRender";
 
+export default async function BlogArticle(props: any) {
+  const blogs = await fetchBlogs(`&filters[slug][$eq]=${props.params.slug}`);
   const blog = blogs.data[0];
-  console.log(blogs.data);
+
   return (
     <div className="mt-8">
       <h1>
@@ -28,20 +26,10 @@ export default async function BlogArticle(props: any) {
         className="rounded-lg mt-8 border"
       ></Image>
       <div className="mt-16">
-        <p
-          dangerouslySetInnerHTML={{
-            __html: mdToHTML(blog.attributes.content),
-          }}
-        ></p>
+        <RichTextRenderer
+          content={blog.attributes.contentBlock}
+        ></RichTextRenderer>
       </div>
     </div>
   );
 }
-
-// export async function generateStaticParams() {
-//   const blogs = await fetchBlogs("");
-
-//   return blogs.data((blog: any) => ({
-//     slug: blog.attributes.slug,
-//   }));
-// }
